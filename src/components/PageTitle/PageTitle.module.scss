@@ -1,0 +1,12 @@
+.PageTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+
+  &__button {
+    &:hover {
+      color: #1976d2;
+    }
+  }
+}

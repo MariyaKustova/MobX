@@ -1,0 +1,12 @@
+.PostsPage__wrapper {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: space-between;
+}
+
+.PostsPage__link {
+  text-decoration: none;
+  margin-bottom: 20px;
+}

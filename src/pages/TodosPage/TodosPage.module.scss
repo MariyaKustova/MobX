@@ -1,0 +1,21 @@
+.TodosPage__listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px;
+  margin-bottom: 15px;
+
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px grey;
+
+  &:hover {
+    border-color: #1976d2;
+    box-shadow: 5px 5px 5px #1976d2;
+  }
+}
+
+.TodosPage__completedTodo {
+  text-decoration: line-through;
+}

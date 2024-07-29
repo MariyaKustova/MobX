@@ -1,0 +1,21 @@
+.PostCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  &__icon {
+    color: #1976d2;
+  }
+
+  &__wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+button.PostCard__backBtn {
+  position: absolute;
+  top: -3px;
+  left: -40px;
+}

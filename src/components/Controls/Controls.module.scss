@@ -1,0 +1,11 @@
+.Controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  &__button {
+    &:hover {
+      color: #1976d2;
+    }
+  }
+}
