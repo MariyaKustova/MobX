@@ -34,12 +34,9 @@ export const PostDialog = ({
         <TextField
           autoFocus
           required
-          label="Post text"
+          label="Post title text"
           fullWidth
           variant="standard"
-          multiline
-          minRows={3}
-          maxRows={6}
           value={postText}
           onChange={(value) => setPostText(value.currentTarget.value)}
         />

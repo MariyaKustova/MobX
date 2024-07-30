@@ -5,6 +5,9 @@ import { getRandomInt } from "../utils";
 
 export default class TodoStore {
   todos: Todo[] = [];
+  userIds: number[] = [...new Set(this.todos.map(({ userId }) => userId))].sort(
+    (a, b) => b - a
+  );
   isLoading = false;
   loadingId: number | null = null;
 
@@ -12,39 +15,25 @@ export default class TodoStore {
     makeAutoObservable(this);
   }
 
-  get userIds() {
-    return [...new Set(this.todos.map(({ userId }) => userId))].sort(
-      (a, b) => b - a
-    );
-  }
-
-  setTodos = (todos: Todo[] | [] = []) => {
-    this.todos = todos;
-  };
-
   loadTodos = async () => {
     this.isLoading = true;
     try {
       const result = await todosApi.getTodos();
       runInAction(() => {
         if (result) this.todos = result;
+        this.isLoading = false;
       });
-      this.setLoadingInitial(false);
     } catch (err) {
       console.log(err);
       runInAction(() => {
-        this.setLoadingInitial(false);
+        this.isLoading = false;
       });
     }
   };
 
-  setLoadingInitial(value: boolean) {
-    this.isLoading = value;
-  }
-
   addTodo = async (todoText: string) => {
     const todo: Omit<Todo, "id"> = {
-      userId: getRandomInt(this.userIds[0]),
+      userId: this.userIds[getRandomInt(this.userIds.length - 1)],
       todo: todoText,
       completed: false,
     };
@@ -81,7 +70,7 @@ export default class TodoStore {
     try {
       await todosApi.deleteTodo(id);
       runInAction(() => {
-        this.setTodos(this.todos.filter((todo) => todo.id !== id));
+        this.todos = this.todos.filter((todo) => todo.id !== id);
         this.loadingId = null;
       });
     } catch (err) {

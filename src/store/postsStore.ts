@@ -4,44 +4,15 @@ import { postsApi } from "../api/postsApi";
 import { getRandomInt } from "../utils";
 
 export default class PostsStore {
-  _post: Post | null = null;
-  _posts: Post[] = [];
-  _tagsList: Tag[] = [];
+  post: Post | null = null;
+  posts: Post[] = [];
+  tagsList: Tag[] = [];
+  userIds: number[] = [...new Set(this.posts.map(({ userId }) => userId))];
   loadingInitial = false;
   loadingId: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
-  }
-
-  get posts() {
-    return this._posts;
-  }
-
-  get post() {
-    return this._post;
-  }
-
-  get tagsList() {
-    return this._tagsList;
-  }
-
-  setPosts = (posts: Post[] | [] = []) => {
-    this._posts = posts;
-  };
-
-  setPost = (post: Post | null) => {
-    this._post = post;
-  };
-
-  setTags = (tags: Tag[]) => {
-    this._tagsList = tags;
-  };
-
-  get userIds() {
-    return [...new Set(this.posts.map(({ userId }) => userId))].sort(
-      (a, b) => b - a
-    );
   }
 
   loadPosts = async () => {
@@ -50,7 +21,7 @@ export default class PostsStore {
       const result = await postsApi.getPosts();
 
       runInAction(() => {
-        if (result?.length) this.setPosts(result);
+        if (result?.length) this.posts = result;
         this.loadingInitial = false;
       });
     } catch (err) {
@@ -67,7 +38,7 @@ export default class PostsStore {
       const result = await postsApi.getPostById(id);
 
       runInAction(() => {
-        if (result) this.setPost(result);
+        if (result) this.post = result;
         this.loadingId = null;
       });
     } catch (err) {
@@ -82,8 +53,9 @@ export default class PostsStore {
     try {
       const response = await postsApi.createPost({
         title,
-        userId: getRandomInt(this.userIds[0]),
+        userId: this.userIds[getRandomInt(this.userIds.length - 1)],
       });
+
       runInAction(() => {
         if (response) {
           const newPost: Post = {
@@ -96,12 +68,11 @@ export default class PostsStore {
               dislikes: 0,
             },
             views: 0,
-            userId: getRandomInt(this.userIds[0]),
+            userId: response.id,
           };
 
-          const newPosts = this.posts.filter(({ id }) => id !== newPost.id);
-
-          this.setPosts([...newPosts, newPost]);
+          let index = this.posts.findIndex((item) => item.id === response.id);
+          this.posts[index] = newPost;
         }
       });
     } catch (err) {
@@ -115,13 +86,11 @@ export default class PostsStore {
       await postsApi.editPost({ id: post.id, title: post.title });
       runInAction(() => {
         let index = this.posts.findIndex((item) => item.id === post.id);
-        this.setPosts(
-          this.posts.map((postItem, postItemIndex) => {
-            if (postItemIndex === index) return post;
-            return postItem;
-          })
-        );
-        this.setPost(post);
+        this.posts = this.posts.map((postItem, postItemIndex) => {
+          if (postItemIndex === index) return post;
+          return postItem;
+        });
+        this.post = post;
         this.loadingId = null;
       });
     } catch (err) {
@@ -135,7 +104,7 @@ export default class PostsStore {
     try {
       await postsApi.deletePost(id);
       runInAction(() => {
-        this.setPosts(this.posts.filter((todo) => todo.id !== id));
+        this.posts = this.posts.filter((todo) => todo.id !== id);
         this.loadingId = null;
       });
     } catch (err) {
@@ -148,7 +117,7 @@ export default class PostsStore {
       const response = await postsApi.getTagsList();
       runInAction(() => {
         if (response) {
-          this.setTags(response);
+          this.tagsList = response;
         }
       });
     } catch (err) {

@@ -6,8 +6,8 @@ import { Typography } from "@mui/material";
 import { useStore } from "../../store";
 import { RoutePath } from "../../model/baseTypes";
 import PostItemPage from "./components/PostCard";
-import { Loader } from "../../components/Loader";
-import PageTitle from "../../components/PageTitle";
+import { Loader } from "../../core/Loader";
+import PageTitle from "../../core/PageTitle";
 import PostItem from "./components/PostItem";
 
 import s from "./PostsPage.module.scss";

@@ -3,12 +3,12 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import { Checkbox } from "@mui/material";
 
-import { Loader } from "../../components/Loader";
+import { Loader } from "../../core/Loader";
 import { TodoDialog } from "./components/TodoDialog";
-import Controls from "../../components/Controls";
+import Controls from "../../core/Controls";
 
 import s from "./TodosPage.module.scss";
-import PageTitle from "../../components/PageTitle";
+import PageTitle from "../../core/PageTitle";
 
 const TodosPage = observer(() => {
   const [editTodoId, setEditTodoId] = useState<number | null>(null);
@@ -23,8 +23,6 @@ const TodosPage = observer(() => {
     isLoading,
     loadingId,
   } = todosStore;
-
-  const isDisabled = Boolean(loadingId);
 
   const currentTodo = todos.find((todo) => todo.id === editTodoId);
 
@@ -59,7 +57,7 @@ const TodosPage = observer(() => {
                 </span>
               </div>
               <Controls
-                isDisabled={isDisabled}
+                isDisabled={loadingId === todo.id}
                 onEdit={() => setEditTodoId(todo.id)}
                 onDelete={() => deleteTodo(todo.id)}
               />
