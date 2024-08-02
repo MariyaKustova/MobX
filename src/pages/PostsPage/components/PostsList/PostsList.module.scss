@@ -1,0 +1,12 @@
+.PostsList {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: space-between;
+
+  &__link {
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+}

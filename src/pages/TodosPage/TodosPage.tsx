@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useStore } from "../../store";
+import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Checkbox } from "@mui/material";
 
+import { useStore } from "../../store";
 import { Loader } from "../../core/Loader";
 import { TodoDialog } from "./components/TodoDialog";
-import Controls from "../../core/Controls";
-
-import s from "./TodosPage.module.scss";
 import PageTitle from "../../core/PageTitle";
+import TodosList from "./components/TodosList";
 
 const TodosPage = observer(() => {
   const [editTodoId, setEditTodoId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const { todosStore } = useStore();
-  const {
-    loadTodos,
-    addTodo,
-    editTodo,
-    deleteTodo,
-    todos,
-    isLoading,
-    loadingId,
-  } = todosStore;
+  const { addTodo, editTodo, todos, isLoading } = todosStore;
 
   const currentTodo = todos.find((todo) => todo.id === editTodoId);
-
-  useEffect(() => {
-    loadTodos();
-  }, [loadTodos]);
 
   const onCloseEditDialog = () => setEditTodoId(null);
   const onCloseCreateDialog = () => setOpenDialog(false);
@@ -36,33 +21,11 @@ const TodosPage = observer(() => {
   return (
     <>
       <PageTitle title="Todos" onClick={() => setOpenDialog(true)} />
-
       {isLoading ? (
         <Loader />
       ) : (
         <>
-          {todos.map((todo) => (
-            <div key={todo.id} className={s.TodosPage__listItem}>
-              <div className={s.TodosPage__wrapper}>
-                <Checkbox
-                  checked={todo.completed}
-                  onChange={() =>
-                    editTodo({ ...todo, completed: !todo.completed })
-                  }
-                />
-                <span
-                  className={todo.completed ? s.TodosPage__completedTodo : ""}
-                >
-                  {todo.todo}
-                </span>
-              </div>
-              <Controls
-                isDisabled={loadingId === todo.id}
-                onEdit={() => setEditTodoId(todo.id)}
-                onDelete={() => deleteTodo(todo.id)}
-              />
-            </div>
-          ))}
+          <TodosList onEdit={setEditTodoId} />
           {Boolean(editTodoId) && (
             <TodoDialog
               open={Boolean(editTodoId)}
