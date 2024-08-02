@@ -12,22 +12,18 @@ interface TodosListProps {
 
 const TodosList = ({ onEdit }: TodosListProps) => {
   const { todosStore } = useStore();
-  const { loadTodos, editTodo, todos, loadingId, deleteTodo } = todosStore;
-
-  useEffect(() => {
-    loadTodos();
-  }, [loadTodos]);
+  const { editTodo, todos, loadingId, deleteTodo } = todosStore;
 
   return (
     <div>
       {todos.map((todo) => (
-        <div key={todo.id} className={s.TodosPage__listItem}>
-          <div className={s.TodosPage__wrapper}>
+        <div key={todo.id} className={s.TodosList__listItem}>
+          <div>
             <Checkbox
               checked={todo.completed}
               onChange={() => editTodo({ ...todo, completed: !todo.completed })}
             />
-            <span className={todo.completed ? s.TodosPage__completedTodo : ""}>
+            <span className={todo.completed ? s.TodosList__completedTodo : ""}>
               {todo.todo}
             </span>
           </div>

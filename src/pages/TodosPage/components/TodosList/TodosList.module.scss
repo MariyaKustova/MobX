@@ -1,4 +1,4 @@
-.TodosPage__listItem {
+.TodosList__listItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,6 +16,6 @@
   }
 }
 
-.TodosPage__completedTodo {
+.TodosList__completedTodo {
   text-decoration: line-through;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 
 import { useStore } from "../../store";
@@ -11,7 +11,11 @@ const TodosPage = observer(() => {
   const [editTodoId, setEditTodoId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const { todosStore } = useStore();
-  const { addTodo, editTodo, todos, isLoading } = todosStore;
+  const { loadTodos, addTodo, editTodo, todos, isLoading } = todosStore;
+
+  useEffect(() => {
+    loadTodos();
+  }, [loadTodos]);
 
   const currentTodo = todos.find((todo) => todo.id === editTodoId);
 
