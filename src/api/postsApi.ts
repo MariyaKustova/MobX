@@ -1,5 +1,4 @@
-import qs from "qs";
-import { Post, PostsResponse, Tag } from "../model/postsTypes";
+import { Post, PostsResponse, Tag } from "@model/postsTypes";
 import { HttpClientBaseQuery } from "./HttpClient";
 
 export const postsApi = {
@@ -11,14 +10,6 @@ export const postsApi = {
     HttpClientBaseQuery<Post>({ url: `/posts/${id}` }).then(
       (response) => response.data
     ),
-  searchPost: (value: string) => {
-    const queryParams = qs.stringify({
-      q: value,
-    });
-    return HttpClientBaseQuery<PostsResponse>({
-      url: `/posts/search?${queryParams}`,
-    }).then((response) => response.data?.posts);
-  },
   createPost: (post: Pick<Post, "userId" | "title">) =>
     HttpClientBaseQuery<Post>({
       url: "/posts/add",

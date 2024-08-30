@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 
-import { useStore } from "../../store";
-import { Loader } from "../../core/Loader";
+import { useStore } from "@store";
+import Loader from "@core/Loader";
+import PageTitle from "@core/PageTitle";
 import { TodoDialog } from "./components/TodoDialog";
-import PageTitle from "../../core/PageTitle";
 import TodosList from "./components/TodosList";
 
 const TodosPage = observer(() => {

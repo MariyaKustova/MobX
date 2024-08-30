@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { observer } from "mobx-react-lite";
+
 import {
   Button,
   Dialog,
@@ -12,13 +14,12 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useStore } from "../../../../store";
-
-import s from "./PostCreateForm.module.scss";
-import { observer } from "mobx-react-lite";
+import { useStore } from "@store";
+import { FormValues } from "@model/postsTypes";
 import { initialValues } from "./constants";
 import { FieldsNames } from "./types";
-import { FormValues } from "../../../../model/postsTypes";
+
+import s from "./PostCreateForm.module.scss";
 
 interface PostCreateFormProps {
   open: boolean;
@@ -30,8 +31,10 @@ const PostCreateForm = observer(({ open, onClose }: PostCreateFormProps) => {
   const { tagsList, loadTagsList, addPost } = postsStore;
 
   useEffect(() => {
-    loadTagsList();
-  }, [loadTagsList]);
+    if (!tagsList.length) {
+      loadTagsList();
+    }
+  }, [loadTagsList, tagsList]);
 
   const {
     control,

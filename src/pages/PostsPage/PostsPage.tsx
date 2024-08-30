@@ -3,10 +3,10 @@ import { observer } from "mobx-react-lite";
 import { Route, Routes } from "react-router-dom";
 import { Typography } from "@mui/material";
 
-import { useStore } from "../../store";
+import { useStore } from "@store";
+import Loader from "@core/Loader";
+import PageTitle from "@core/PageTitle";
 import PostItemPage from "./components/PostCard";
-import { Loader } from "../../core/Loader";
-import PageTitle from "../../core/PageTitle";
 import PostCreateForm from "./components/PostCreateForm";
 import PostsList from "./components/PostsList";
 

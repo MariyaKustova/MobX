@@ -1,4 +1,4 @@
-import { Todo, TodosResponse } from "../model/todosTypes";
+import { Todo, TodosResponse } from "@model/todosTypes";
 import { HttpClientBaseQuery } from "./HttpClient";
 
 export const todosApi = {

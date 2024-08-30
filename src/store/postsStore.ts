@@ -1,13 +1,14 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { FormValues, Post, Tag } from "../model/postsTypes";
-import { postsApi } from "../api/postsApi";
+
+import { FormValues, Post, Tag } from "@model/postsTypes";
+import { postsApi } from "@api/postsApi";
 import { getRandomInt } from "../utils";
 
 export default class PostsStore {
   post: Post | null = null;
   posts: Post[] = [];
   tagsList: Tag[] = [];
-  userIds: number[] = [...new Set(this.posts.map(({ userId }) => userId))];
+  userIds: number[] = [];
   loadingInitial = false;
   loadingId: string | null = null;
 
@@ -22,6 +23,7 @@ export default class PostsStore {
 
       runInAction(() => {
         if (result?.length) this.posts = result;
+        this.userIds = [...new Set(result?.map(({ userId }) => userId))] ?? [];
         this.loadingInitial = false;
       });
     } catch (err) {
@@ -50,10 +52,12 @@ export default class PostsStore {
   };
 
   addPost = async ({ title, body, tags }: FormValues) => {
+    const userId = this.userIds[getRandomInt(this.userIds.length - 1)];
+
     try {
       const response = await postsApi.createPost({
         title,
-        userId: this.userIds[getRandomInt(this.userIds.length - 1)],
+        userId,
       });
 
       runInAction(() => {
@@ -71,8 +75,7 @@ export default class PostsStore {
             userId: response.id,
           };
 
-          let index = this.posts.findIndex((item) => item.id === response.id);
-          this.posts[index] = newPost;
+          this.posts = [...this.posts, newPost];
         }
       });
     } catch (err) {

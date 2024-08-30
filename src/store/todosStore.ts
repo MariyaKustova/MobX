@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { Todo } from "../model/todosTypes";
-import { todosApi } from "../api/todosApi";
+
+import { Todo } from "@model/todosTypes";
+import { todosApi } from "@api/todosApi";
 import { getRandomInt } from "../utils";
 
 export default class TodoStore {

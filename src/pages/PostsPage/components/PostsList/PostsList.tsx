@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { useStore } from "../../../../store";
-import { RoutePath } from "../../../../model/baseTypes";
+import { useStore } from "@store";
+import { RoutePath } from "@model/baseTypes";
 import PostItem from "../PostItem";
 
 import s from "./PostsList.module.scss";

@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Checkbox } from "@mui/material";
 
-import { useStore } from "../../../../store";
-import Controls from "../../../../core/Controls";
+import { useStore } from "@store";
+import Controls from "@core/Controls";
 
 import s from "./TodosList.module.scss";
 

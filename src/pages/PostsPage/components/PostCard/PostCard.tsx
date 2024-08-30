@@ -3,11 +3,12 @@ import { observer } from "mobx-react-lite";
 import { useNavigate, useParams } from "react-router-dom";
 import { IconButton, Typography } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
-import { useStore } from "../../../../store";
-import { Loader } from "../../../../core/Loader";
-import Controls from "../../../../core/Controls";
+
+import { useStore } from "@store";
+import Loader from "@core/Loader";
+import Controls from "@core/Controls";
+import { RoutePath } from "@model/baseTypes";
 import { PostDialog } from "./components/PostDialog";
-import { RoutePath } from "../../../../model/baseTypes";
 
 import s from "./PostCard.module.scss";
 
