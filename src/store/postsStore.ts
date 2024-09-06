@@ -22,8 +22,11 @@ export default class PostsStore {
       const result = await postsApi.getPosts();
 
       runInAction(() => {
-        if (result?.length) this.posts = result;
-        this.userIds = [...new Set(result?.map(({ userId }) => userId))] ?? [];
+        if (result?.length) {
+          this.posts = result;
+          this.userIds =
+            [...new Set(result?.map(({ userId }) => userId))] ?? [];
+        }
         this.loadingInitial = false;
       });
     } catch (err) {
@@ -53,31 +56,21 @@ export default class PostsStore {
 
   addPost = async ({ title, body, tags }: FormValues) => {
     const userId = this.userIds[getRandomInt(this.userIds.length - 1)];
+    const newPost: Omit<Post, "id"> = {
+      title,
+      body,
+      tags,
+      reactions: {
+        likes: 0,
+        dislikes: 0,
+      },
+      views: 0,
+      userId: userId,
+    };
 
     try {
-      const response = await postsApi.createPost({
-        title,
-        userId,
-      });
-
-      runInAction(() => {
-        if (response) {
-          const newPost: Post = {
-            id: response.id,
-            title,
-            body,
-            tags,
-            reactions: {
-              likes: 0,
-              dislikes: 0,
-            },
-            views: 0,
-            userId: response.id,
-          };
-
-          this.posts = [...this.posts, newPost];
-        }
-      });
+      await postsApi.createPost(newPost);
+      runInAction(() => this.loadPosts());
     } catch (err) {
       console.log(err);
     }
@@ -86,16 +79,12 @@ export default class PostsStore {
   editPost = async (post: Post) => {
     this.loadingId = String(post.id);
     try {
-      await postsApi.editPost({ id: post.id, title: post.title });
+      await postsApi.editPost(post);
       runInAction(() => {
-        let index = this.posts.findIndex((item) => item.id === post.id);
-        this.posts = this.posts.map((postItem, postItemIndex) => {
-          if (postItemIndex === index) return post;
-          return postItem;
-        });
         this.post = post;
-        this.loadingId = null;
+        this.loadPosts();
       });
+      this.loadingId = null;
     } catch (err) {
       console.log(err);
       this.loadingId = null;
@@ -106,15 +95,13 @@ export default class PostsStore {
     this.loadingId = String(id);
     try {
       await postsApi.deletePost(id);
-      runInAction(() => {
-        this.posts = this.posts.filter((todo) => todo.id !== id);
-        this.loadingId = null;
-      });
+      runInAction(() => this.loadPosts());
     } catch (err) {
       console.log(err);
       this.loadingId = null;
     }
   };
+
   loadTagsList = async () => {
     try {
       const response = await postsApi.getTagsList();

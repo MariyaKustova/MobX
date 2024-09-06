@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
 import { useStore } from "@store";
 import { RoutePath } from "@model/baseTypes";
@@ -7,7 +8,7 @@ import PostItem from "../PostItem";
 
 import s from "./PostsList.module.scss";
 
-const PostsList = () => {
+const PostsList = observer(function PostsList() {
   const { postsStore } = useStore();
   const { posts, loadPosts } = postsStore;
 
@@ -30,6 +31,6 @@ const PostsList = () => {
       ))}
     </div>
   );
-};
+});
 
 export default PostsList;

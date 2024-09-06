@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import FaceIcon from "@mui/icons-material/Face";
 
 import s from "./PostItem.module.scss";
+import { observer } from "mobx-react-lite";
 
 interface PostItemProps {
   title: string;
@@ -10,7 +11,7 @@ interface PostItemProps {
   body: string;
 }
 
-const PostItem = ({ title, tags, body }: PostItemProps) => {
+const PostItem = observer(({ title, tags, body }: PostItemProps) => {
   return (
     <div className={s.PostItem}>
       <div className={s.PostItem__content}>
@@ -29,6 +30,6 @@ const PostItem = ({ title, tags, body }: PostItemProps) => {
       </Typography>
     </div>
   );
-};
+});
 
 export default PostItem;

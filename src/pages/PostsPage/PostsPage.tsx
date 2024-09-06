@@ -10,7 +10,7 @@ import PostItemPage from "./components/PostCard";
 import PostCreateForm from "./components/PostCreateForm";
 import PostsList from "./components/PostsList";
 
-const PostsPageComponent = observer(() => {
+const PostsPageComponent = observer(function PostsPageComponent() {
   const { postsStore } = useStore();
   const { loadingInitial } = postsStore;
   const [openCreateForm, setOpenCreateForm] = useState(false);

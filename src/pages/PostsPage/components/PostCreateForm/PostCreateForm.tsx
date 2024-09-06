@@ -26,7 +26,10 @@ interface PostCreateFormProps {
   onClose: () => void;
 }
 
-const PostCreateForm = observer(({ open, onClose }: PostCreateFormProps) => {
+const PostCreateForm = observer(function PostCreateForm({
+  open,
+  onClose,
+}: PostCreateFormProps) {
   const { postsStore } = useStore();
   const { tagsList, loadTagsList, addPost } = postsStore;
 

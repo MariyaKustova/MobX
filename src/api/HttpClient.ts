@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-const BASE_URL = "https://dummyjson.com";
+const BASE_URL = "http://localhost:3001";
 
 const HttpClient = axios.create({});
 

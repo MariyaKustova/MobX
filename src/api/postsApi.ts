@@ -1,31 +1,33 @@
-import { Post, PostsResponse, Tag } from "@model/postsTypes";
+import { Post, Tag } from "@model/postsTypes";
 import { HttpClientBaseQuery } from "./HttpClient";
+
+const BASE_URL = "/posts";
 
 export const postsApi = {
   getPosts: () =>
-    HttpClientBaseQuery<PostsResponse>({ url: "/posts" }).then(
-      (response) => response.data?.posts
+    HttpClientBaseQuery<Post[]>({ url: BASE_URL }).then(
+      (response) => response.data
     ),
   getPostById: (id: string) =>
     HttpClientBaseQuery<Post>({ url: `/posts/${id}` }).then(
       (response) => response.data
     ),
-  createPost: (post: Pick<Post, "userId" | "title">) =>
+  createPost: (post: Omit<Post, "id">) =>
     HttpClientBaseQuery<Post>({
-      url: "/posts/add",
+      url: BASE_URL,
       method: "post",
       data: post,
     }).then((response) => response.data),
-  editPost: (post: Pick<Post, "id" | "title">) =>
+  editPost: (post: Post) =>
     HttpClientBaseQuery<Post>({
-      url: `/posts/${post.id}`,
+      url: `${BASE_URL}/${post.id}`,
       method: "put",
-      data: { title: post.title },
+      data: post,
     }),
   deletePost: (id: number) =>
-    HttpClientBaseQuery<Post>({ url: `/posts/${id}`, method: "delete" }),
+    HttpClientBaseQuery<Post>({ url: `${BASE_URL}/${id}`, method: "delete" }),
   getTagsList: () =>
-    HttpClientBaseQuery<Tag[]>({ url: `/posts/tags` }).then(
+    HttpClientBaseQuery<Tag[]>({ url: `/tags` }).then(
       (response) => response.data
     ),
 };

@@ -12,7 +12,7 @@ import { PostDialog } from "./components/PostDialog";
 
 import s from "./PostCard.module.scss";
 
-const PostCard = observer(() => {
+const PostCard = observer(function PostCard() {
   const { postsStore } = useStore();
   const { post, loadPostById, editPost, deletePost, loadingId } = postsStore;
 

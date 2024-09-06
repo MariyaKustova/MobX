@@ -6,9 +6,7 @@ import { getRandomInt } from "../utils";
 
 export default class TodoStore {
   todos: Todo[] = [];
-  userIds: number[] = [...new Set(this.todos.map(({ userId }) => userId))].sort(
-    (a, b) => b - a
-  );
+  userIds: number[] = [];
   isLoading = false;
   loadingId: number | null = null;
 
@@ -21,7 +19,12 @@ export default class TodoStore {
     try {
       const result = await todosApi.getTodos();
       runInAction(() => {
-        if (result) this.todos = result;
+        if (result?.length) {
+          this.todos = result;
+          this.userIds = [...new Set(result.map(({ userId }) => userId))].sort(
+            (a, b) => b - a
+          );
+        }
         this.isLoading = false;
       });
     } catch (err) {
@@ -40,11 +43,9 @@ export default class TodoStore {
     };
 
     try {
-      const newTodo = await todosApi.createTodo(todo);
+      await todosApi.createTodo(todo);
       runInAction(() => {
-        if (newTodo) {
-          this.todos.push(newTodo);
-        }
+        this.loadTodos();
       });
     } catch (err) {
       console.log(err);
@@ -56,8 +57,7 @@ export default class TodoStore {
     try {
       await todosApi.editTodo(todo);
       runInAction(() => {
-        let index = this.todos.findIndex((item) => item.id === todo.id);
-        this.todos[index] = todo;
+        this.loadTodos();
         this.loadingId = null;
       });
     } catch (err) {
@@ -71,7 +71,7 @@ export default class TodoStore {
     try {
       await todosApi.deleteTodo(id);
       runInAction(() => {
-        this.todos = this.todos.filter((todo) => todo.id !== id);
+        this.loadTodos();
         this.loadingId = null;
       });
     } catch (err) {

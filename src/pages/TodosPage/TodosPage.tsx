@@ -7,7 +7,7 @@ import PageTitle from "@core/PageTitle";
 import { TodoDialog } from "./components/TodoDialog";
 import TodosList from "./components/TodosList";
 
-const TodosPage = observer(() => {
+const TodosPage = observer(function TodosPage() {
   const [editTodoId, setEditTodoId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const { todosStore } = useStore();
